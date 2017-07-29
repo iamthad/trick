@@ -236,14 +236,32 @@ int Trick::DataRecordGroup::add_time_variable() {
 
 int Trick::DataRecordGroup::add_variable( std::string in_name , std::string alias ) {
 
-    Trick::DataRecordBuffer * new_var = new Trick::DataRecordBuffer ;
-    // Trim leading spaces
-    in_name.erase( 0, in_name.find_first_not_of( " \t" ) );
-    // Trim trailing spaces
-    in_name.erase( in_name.find_last_not_of( " \t" ) + 1);
-    new_var->name = in_name ;
-    new_var->alias = alias ;
-    rec_buffer.push_back(new_var) ;
+    REF2 * ref2 = ref_attributes(const_cast<char *>(in_name.c_str())) ;
+    // Recursively add the elements of multi-dimensional array
+    // If the ref_attributes call fails, fail gracefully to the normal case
+    if (ref2 && ref2->attr &&
+        // If current index level is less than maximum index level
+        ref2->num_index < std::min(ref2->attr->num_index, TRICK_MAX_INDEX)) {
+        // Add a variable for each element in the array
+        for (int ix = 0; ix < ref2->attr->index[ref2->num_index].size; ++ix) {
+            std::string nextMember = in_name + "[" + std::to_string(ix) + "]";
+            // Only create an alias if we started with one
+            std::string nextAlias =
+                alias.length() ? alias + "[" + std::to_string(ix) + "]" : "";
+            add_variable(nextMember, nextAlias);
+        }
+    }
+    else {
+        // Trim leading spaces
+        in_name.erase(0, in_name.find_first_not_of(" \t"));
+        // Trim trailing spaces
+        in_name.erase(in_name.find_last_not_of(" \t") + 1);
+        Trick::DataRecordBuffer *new_var = new Trick::DataRecordBuffer;
+        new_var->name = in_name;
+        new_var->alias = alias;
+        rec_buffer.push_back(new_var);
+    }
+    ref_free(ref2);
     return 0 ;
 }
 
