@@ -418,7 +418,7 @@ alloc/{W}*\( {
     * convert the string to an integer value, save the value in
     * the YACC variable and return the YACC token.
     * Decimals can overflow for unsigned long longs so test to
-    * see if we are over that and covert to unsigned if it's
+    * see if we are over that and convert to unsigned if it's
     * greater that that huge number
     */
 #if __APPLE__

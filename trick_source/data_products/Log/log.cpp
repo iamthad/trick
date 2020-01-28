@@ -1007,14 +1007,14 @@ int LogData::setUnit(int paramIdx, std::string to_units)
         ut_unit * from = ut_parse(u_system, from_units.c_str(), UT_ASCII) ;
         if ( !from ) {
             unitVal_[paramIdx] = 1.0;
-            std::cout << "could not covert from units " << from_units << std::endl ;
+            std::cout << "could not convert from units " << from_units << std::endl ;
             return -1 ;
         }
 
         ut_unit * to = ut_parse(u_system, to_units.c_str(), UT_ASCII) ;
         if ( !to ) {
             unitVal_[paramIdx] = 1.0;
-            std::cout << "could not covert to units " << to_units << std::endl ;
+            std::cout << "could not convert to units " << to_units << std::endl ;
             return -1 ;
         }
 

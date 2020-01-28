@@ -97,7 +97,7 @@ NAM   [_a-zA-Z][_a-zA-Z0-9:]*
     * convert the string to an integer value, save the value in
     * the YACC variable and return the YACC token.
     * Decimals can overflow for unsigned long longs so test to
-    * see if we are over that and covert to unsigned if it's
+    * see if we are over that and convert to unsigned if it's
     * greater that that huge number
     */
    yylval->ival = atoi(yytext);
